@@ -14,11 +14,40 @@ Globals:
     LoggingConfig:
       LogFormat: JSON
 Resources:
+  DBSecret:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Name: DBSecret
+      Description: Credentials for the pg rds instance
+      GenerateSecretString:
+        SecretStringTemplate: '{"username": "postgres"}'
+        GenerateStringKey: "password"
+        PasswordLength: 16
+        ExcludeCharacters: '"@/\'
+
+  PGDatabaseInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.t3.micro
+      EngineVersion: "14.10"
+      Engine: postgres
+      AllocatedStorage: 20
+      MasterUsername: '{{resolve:secretsmanager:DBSecret:SecretString:username}}'
+      MasterUserPassword: '{{resolve:secretsmanager:DBSecret:SecretString:password}}'
+      PubliclyAccessible: true
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
     Properties:
-      CodeUri: hello-world/
+      CodeUri: rest/
       Handler: app.lambdaHandler
+      Environment: 
+        Variables:
+          PG_PORT: !GetAtt PGDatabaseInstance.Endpoint.Port
+          PG_HOST: !GetAtt PGDatabaseInstance.Endpoint.Address
+          PG_USER: '{{resolve:secretsmanager:DBSecret:SecretString:username}}'
+          PG_PASS: '{{resolve:secretsmanager:DBSecret:SecretString:password}}'
+          PG_DB: 'rest'
       Runtime: nodejs18.x
       Architectures:
       - x86_64

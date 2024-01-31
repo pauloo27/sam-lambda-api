@@ -131,7 +131,7 @@ describe('Unit test for app handler', function () {
         expect(result.statusCode).toEqual(500);
         expect(result.body).toEqual(
             JSON.stringify({
-                message: 'something error happened',
+                message: 'some error happened',
             }),
         );
     });
