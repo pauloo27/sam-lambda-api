@@ -16,6 +16,8 @@
     "test": "npm run compile && npm run unit"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "esbuild": "^0.14.14",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.1",
