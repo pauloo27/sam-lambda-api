@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { newDataSource } from '../../db/datasource';
+import { newDataSource } from '../../core/db/datasource';
 import { Ingredient } from '../../entities/ingredient';
 import { IsDefined, IsNumber, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';

@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { Ingredient } from '../entities/ingredient';
+import { Ingredient } from '../../entities/ingredient';
 
 let cachedDs: DataSource | null = null;
 
@@ -15,9 +15,14 @@ export async function newDataSource(): Promise<DataSource> {
         password: process.env.PG_PASS,
         database: process.env.PG_DB,
         entities: [Ingredient],
-        synchronize: process.env.PG_MIGRATE === 'true',
     });
     await ds.initialize();
+
+    console.log(JSON.stringify({ migrate: process.env.PG_MIGRATE, a: process.env.PG_DB }));
+    if (process.env.PG_MIGRATE === 'true') {
+        console.log(JSON.stringify({ msg: 'Migrating...' }));
+        await ds.synchronize();
+    }
 
     cachedDs = ds;
     return ds;

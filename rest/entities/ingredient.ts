@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity({ name: "ingredient" })
+@Entity({ name: 'ingredient' })
 export class Ingredient {
-    @PrimaryGeneratedColumn({ type: "bigint" })
+    @PrimaryGeneratedColumn({ type: 'bigint' })
     id!: number;
 
-    @Column({ unique: true, type: "varchar" })
+    @Column({ unique: true, type: 'varchar' })
     name!: string;
 
-    @Column({ type: "int" })
+    @Column({ type: 'int' })
     availableAmount!: number;
 }

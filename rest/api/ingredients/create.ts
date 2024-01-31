@@ -1,10 +1,10 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
-import { newDataSource } from '../../db/datasource';
+import { newDataSource } from '../../core/db/datasource';
 import { Ingredient } from '../../entities/ingredient';
 import { IsDefined, IsNumber, IsString, Length, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
-import { isUniqueErr } from '../../db/err';
+import { isUniqueErr } from '../../core/db/err';
 
 class CreateIngredientRequest {
     @IsString()
