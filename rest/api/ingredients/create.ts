@@ -5,6 +5,7 @@ import { Ingredient } from '../../entities/ingredient';
 import { IsDefined, IsNumber, IsString, Length, validate } from 'class-validator';
 import { plainToClass } from 'class-transformer';
 import { isUniqueErr } from '../../core/db/err';
+import { newHandler } from '../../core/api/handler';
 
 class CreateIngredientRequest {
     @IsString()
@@ -17,7 +18,7 @@ class CreateIngredientRequest {
     availableAmount = 0;
 }
 
-export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
+const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     try {
         const ds = await newDataSource();
         const repo = ds.getRepository(Ingredient);
@@ -52,9 +53,8 @@ export const lambdaHandler = async (event: APIGatewayProxyEvent): Promise<APIGat
                 body: JSON.stringify({ message: 'ingredient already exists' }),
             };
         }
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ message: 'something went wrong', error }),
-        };
+        throw error;
     }
 };
+
+export const lambdaHandler = newHandler(handler);

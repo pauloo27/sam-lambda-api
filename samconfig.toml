@@ -20,7 +20,7 @@ resolve_s3 = true
 s3_prefix = "restaurant-rest-api"
 region = "us-east-1"
 image_repositories = []
-disable_rollback = true
+disable_rollback = false
 
 [default.package.parameters]
 resolve_s3 = true

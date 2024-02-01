@@ -34,6 +34,17 @@ Resources:
       MasterUserPassword: '{{resolve:secretsmanager:DBSecret:SecretString:password}}'
       PubliclyAccessible: true
 
+  RestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Auth:
+        ApiKeyRequired: false
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+
   CreateIngredientFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -54,6 +65,7 @@ Resources:
         Create:
           Type: Api
           Properties:
+            RestApiId: !Ref RestApi
             Path: /ingredients
             Method: post
     Metadata:
@@ -85,6 +97,7 @@ Resources:
         Create:
           Type: Api
           Properties:
+            RestApiId: !Ref RestApi
             Path: /ingredients/{id}
             Method: get
     Metadata:
@@ -116,6 +129,7 @@ Resources:
         Create:
           Type: Api
           Properties:
+            RestApiId: !Ref RestApi
             Path: /ingredients/{id}
             Method: put
     Metadata:
@@ -147,6 +161,7 @@ Resources:
         Create:
           Type: Api
           Properties:
+            RestApiId: !Ref RestApi
             Path: /ingredients
             Method: get
     Metadata:
@@ -161,4 +176,4 @@ Resources:
 Outputs:
   IngredientFunction:
     Description: API Gateway endpoint URL for Prod stage for Create Ingredient Function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ingredients/"
+    Value: !Sub "https://${RestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ingredients/"
