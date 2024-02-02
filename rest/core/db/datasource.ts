@@ -1,10 +1,13 @@
 import { DataSource } from 'typeorm';
 import { Ingredient } from '../../entities/ingredient';
+import { MenuItem } from '../../entities/menu-item';
+import { MenuItemIngredient } from '../../entities/menu-item-ingredient';
+import { Order } from '../../entities/order';
+import { OrderMenuItem } from '../../entities/order-menu-item';
 
 let cachedDs: DataSource | null = null;
 
 export async function newDataSource(): Promise<DataSource> {
-    // too bad
     if (cachedDs) return cachedDs;
 
     const ds = new DataSource({
@@ -14,11 +17,10 @@ export async function newDataSource(): Promise<DataSource> {
         username: process.env.PG_USER,
         password: process.env.PG_PASS,
         database: process.env.PG_DB,
-        entities: [Ingredient],
+        entities: [Ingredient, MenuItem, MenuItemIngredient, Order, OrderMenuItem],
     });
-    await ds.initialize();
+    await ds.initialize().catch((err) => console.error(err));
 
-    console.log(JSON.stringify({ migrate: process.env.PG_MIGRATE, a: process.env.PG_DB }));
     if (process.env.PG_MIGRATE === 'true') {
         console.log(JSON.stringify({ msg: 'Migrating...' }));
         await ds.synchronize();
