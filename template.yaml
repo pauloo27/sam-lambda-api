@@ -141,7 +141,7 @@ Resources:
         EntryPoints:
         - api/ingredients/update.ts
 
-  ListIngredientFunction:
+  ListIngredientsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -173,7 +173,7 @@ Resources:
         EntryPoints:
         - api/ingredients/list.ts
 
-  CreateMenuItem:
+  CreateMenuItemFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -205,7 +205,7 @@ Resources:
         EntryPoints:
         - api/menu-items/create.ts
 
-  DeleteMenuItem:
+  DeleteMenuItemFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -237,7 +237,7 @@ Resources:
         EntryPoints:
         - api/menu-items/delete.ts
 
-  GetMenuItem:
+  GetMenuItemFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -269,7 +269,7 @@ Resources:
         EntryPoints:
         - api/menu-items/get.ts
 
-  ListMenuItems:
+  ListMenuItemsFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -301,7 +301,7 @@ Resources:
         EntryPoints:
         - api/menu-items/list.ts
 
-  ListOrders:
+  ListOrdersFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -333,7 +333,7 @@ Resources:
         EntryPoints:
         - api/orders/list.ts
 
-  PlaceOrder:
+  PlaceOrderFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -365,7 +365,7 @@ Resources:
         EntryPoints:
         - api/orders/create.ts
 
-  GetOrder:
+  GetOrderFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
@@ -397,7 +397,7 @@ Resources:
         EntryPoints:
         - api/orders/get.ts
 
-  UpdateOrder:
+  UpdateOrderFunction:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: rest/
