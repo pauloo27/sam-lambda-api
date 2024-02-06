@@ -27,6 +27,8 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       DBInstanceClass: db.t3.micro
+      # disable backups, not good for prod but i am not paying for it
+      BackupRetentionPeriod: 0
       EngineVersion: "14.10"
       Engine: postgres
       AllocatedStorage: 20
