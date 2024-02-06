@@ -1,33 +1,19 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { newDataSource } from '../../core/db/datasource';
-import { Ingredient } from '../../entities/ingredient';
-import { IsDefined, IsNumber, validate, ValidateNested } from 'class-validator';
-import { plainToClass, Type } from 'class-transformer';
+import { IsEnum, validate } from 'class-validator';
+import { plainToClass } from 'class-transformer';
 import { newHandler } from '../../core/api/handler';
-import { MenuItem } from '../../entities/menu-item';
+import { Order, OrderStatus } from '../../entities/order';
 
-class MenuItemIngredient {
-    @IsNumber()
-    @IsDefined()
-    ingredientId!: number;
-
-    @IsNumber()
-    @IsDefined()
-    amount!: number;
+class UpdateOrderRequest {
+    @IsEnum(OrderStatus)
+    status!: OrderStatus;
 }
-
-class UpdateMenuItemRequest {
-    @IsDefined()
-    @ValidateNested({ each: true })
-    @Type(() => MenuItemIngredient)
-    ingredients!: MenuItemIngredient[];
-}
-
 
 const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const ds = await newDataSource();
-    const repo = ds.getRepository(MenuItem);
+    const repo = ds.getRepository(Order);
 
     if (!event.body)
         return {
@@ -43,7 +29,7 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
             body: JSON.stringify({ message: 'missing id' }),
         };
     }
-    const parsedBody = plainToClass(UpdateMenuItemRequest, JSON.parse(event.body));
+    const parsedBody = plainToClass(UpdateOrderRequest, JSON.parse(event.body));
 
     const validationErrors = await validate(parsedBody);
 
@@ -57,20 +43,20 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
         };
     }
 
-    const { affected } = await repo.update({ id }, { ingredients: parsedBody.ingredients });
+    const { affected } = await repo.update({ id }, { status: parsedBody.status });
 
     if (affected === 0) {
         return {
             statusCode: 404,
-            body: JSON.stringify({ message: 'menu item not found' }),
+            body: JSON.stringify({ message: 'order not found' }),
         };
     }
 
-    const menuItem = await repo.findOneBy({ id });
+    const order = await repo.findOneBy({ id });
 
     return {
         statusCode: 200,
-        body: JSON.stringify(menuItem),
+        body: JSON.stringify(order),
     };
 };
 

@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { OrderMenuItem } from './order-menu-item';
 
-enum OrderStatus {
-    PENDING,
-    COMPLETED,
+export enum OrderStatus {
+    PENDING = 'PENDING',
+    COMPLETED = 'COMPLETED',
 }
 
 @Entity({ name: 'order' })
@@ -15,4 +16,7 @@ export class Order {
 
     @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
     status!: OrderStatus;
+
+    @OneToMany(() => OrderMenuItem, (orderMenuItem) => orderMenuItem.order, { cascade: true })
+    orderItems!: Array<OrderMenuItem>;
 }
