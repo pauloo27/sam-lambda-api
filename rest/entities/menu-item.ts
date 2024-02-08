@@ -9,6 +9,9 @@ export class MenuItem {
     @Column({ unique: true, type: 'varchar' })
     name!: string;
 
+    @Column({ type: 'decimal' })
+    price!: string;
+
     @OneToMany(() => MenuItemIngredient, (menuItemIngredient) => menuItemIngredient.menuItem, { cascade: true })
     ingredients!: Array<MenuItemIngredient>;
 }

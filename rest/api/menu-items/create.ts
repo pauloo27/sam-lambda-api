@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 import { newDataSource } from '../../core/db/datasource';
-import { IsDefined, IsNumber, IsString, Length, validate, ValidateNested } from 'class-validator';
+import { IsDefined, IsNumber, IsNumberString, IsString, Length, validate, ValidateNested } from 'class-validator';
 import { plainToClass, Type } from 'class-transformer';
 import { isUniqueErr } from '../../core/db/err';
 import { newHandler } from '../../core/api/handler';
@@ -22,6 +22,11 @@ class CreateMenuItemRequest {
     @Length(1, 255)
     @IsDefined()
     name!: string;
+
+    @IsString()
+    @IsDefined()
+    @IsNumberString()
+    price!: string;
 
     @IsDefined()
     @ValidateNested({ each: true })
