@@ -17,6 +17,9 @@ export class Order {
     @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.PENDING })
     status!: OrderStatus;
 
+    @Column({ type: 'decimal' })
+    price!: string;
+
     @OneToMany(() => OrderMenuItem, (orderMenuItem) => orderMenuItem.order, { cascade: true })
     orderItems!: Array<OrderMenuItem>;
 }
