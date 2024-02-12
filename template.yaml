@@ -207,6 +207,39 @@ Resources:
         EntryPoints:
         - api/menu-items/create.ts
 
+  UpdateMenuItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: rest/
+      Handler: api/menu-items/update.lambdaHandler
+      Environment: 
+        Variables:
+          PG_PORT: !GetAtt PGDatabaseInstance.Endpoint.Port
+          PG_HOST: !GetAtt PGDatabaseInstance.Endpoint.Address
+          PG_USER: '{{resolve:secretsmanager:DBSecret:SecretString:username}}'
+          PG_PASS: '{{resolve:secretsmanager:DBSecret:SecretString:password}}'
+          PG_DB: 'rest'
+          PG_MIGRATE: 'false'
+      Runtime: nodejs18.x
+      Architectures:
+      - x86_64
+      Events:
+        Create:
+          Type: Api
+          Properties:
+            RestApiId: !Ref RestApi
+            Path: /menu/{id}
+            Method: put
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - api/menu-items/update.ts
+
+
   DeleteMenuItemFunction:
     Type: AWS::Serverless::Function
     Properties:
