@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, Relation, JoinColumn } from 'typeorm';
+import { Entity, Column, JoinColumn, ManyToOne } from 'typeorm';
 import { Ingredient } from './ingredient';
 import { MenuItem } from './menu-item';
 
@@ -13,11 +13,11 @@ export class MenuItemIngredient {
     @Column({ type: 'int' })
     amount!: number;
 
-    @OneToOne(() => Ingredient)
-    @JoinColumn({ name: 'ingredientId', referencedColumnName: 'id' })
-    ingredient!: Relation<Ingredient>;
+    @ManyToOne(() => Ingredient)
+    @JoinColumn({ name: 'ingredientId' })
+    ingredient!: Ingredient;
 
-    @OneToOne(() => MenuItem, { onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'menuItemId', referencedColumnName: 'id' })
-    menuItem!: Relation<MenuItem>;
+    @ManyToOne(() => MenuItem, menuItem => menuItem.ingredients, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'menuItemId' })
+    menuItem!: MenuItem;
 }
