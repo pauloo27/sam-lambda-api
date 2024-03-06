@@ -8,7 +8,7 @@ const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResu
     const ds = await newDataSource();
     const repo = ds.getRepository(Order);
     const statusFilter = event.queryStringParameters?.status as OrderStatus;
-    const orders = await repo.find({ order: { id: 'ASC'}, where: { status: statusFilter }});
+    const orders = await repo.find({ order: { id: 'ASC'}, where: { status: statusFilter }, relations: ['orderItems', 'orderItems.menuItem']});
 
     return {
         statusCode: 200,
